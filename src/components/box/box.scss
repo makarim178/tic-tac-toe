@@ -1,0 +1,32 @@
+.box{
+    width: 100px;
+    height: 100px;
+    border: solid 12px gray;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 4rem;
+    cursor: pointer;
+    span {
+        user-select: none;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+}
+.box-bg {
+    background-color: beige;
+}
+
+.box-wins {
+    background-color: red;
+}
+
+.box-no-filled {
+    background-color: chocolate;
+}
+
+.not-allowed {
+    cursor: not-allowed
+}
