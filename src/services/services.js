@@ -15,17 +15,6 @@ export const getWinCombs = selectedCombinations => {
     return { isWinner, winningNumbers }
 }
 
-export const listClassNames = (listNames, newNames) => {
-    return newNames.reduce((acc, name) => {
-        if (!acc.includes(name)) acc.push(name)
-        return acc;
-    }, listNames);
-}
-
-export const removeClassName = (listNames, replaceName) => listNames.filter(name => name !== replaceName);
-
 export default {
-    getWinCombs, 
-    listClassNames,
-    removeClassName
+    getWinCombs
 }

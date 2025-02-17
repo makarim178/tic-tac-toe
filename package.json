@@ -1,6 +1,6 @@
 {
   "name": "tictactoe",
-  "homepage": "https://makarim178/github.io/tic-tac-toe/",
+  "homepage": "https://makarim178.github.io/tic-tac-toe/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,7 +16,8 @@
     "gh-pages": "^6.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sass": "^1.85.0"
+    "sass": "^1.85.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
