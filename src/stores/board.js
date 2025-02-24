@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { PLAYERS } from '@shared/constants';
+import { PLAYERS, STYLENAMES } from '@shared/constants';
 
 export const useBoardStore = create((set) => ({
     board: Array(9).fill(''),
@@ -18,8 +18,11 @@ export const useBoardStore = create((set) => ({
     setBoard: (index, content) => set((state) => {
         let nb = [ ...state.board];
         nb[index] = content;
-        return { board: nb };
+        let newBoxStyles = [ ...state.boxStyles];
+        newBoxStyles[index] = `${STYLENAMES.CLICKED} ${STYLENAMES.NOT_ALLOWED}`
+        return { board: nb, boxStyles: newBoxStyles };
     }),
+    setBoardStyles: content => set(() => ({ boxStyles: content })),
     setBoxStyles: (index, content) => set((state) => {
         let ns = [ ...state.boxStyles];
         ns[index] = content;
@@ -30,7 +33,9 @@ export const useBoardStore = create((set) => ({
         let currScore = state.scores[player] + 1;
         return { scores: { ...state.scores, [player]: currScore }, isWin: true};
     }),
-    setResetScores: () => set(() => ({ scores: { [PLAYERS.X]: 0, [PLAYERS.O]: 0}})),
+    setResetScores: () => set(() => ({
+        scores: { [PLAYERS.X]: 0, [PLAYERS.O]: 0}
+    })),
     setNewBoard: () => set(() => ({
         board: Array(9).fill(''),
         boxStyles: Array(9).fill(''),

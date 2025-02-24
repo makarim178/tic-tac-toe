@@ -1,4 +1,4 @@
-import { useBoardStore } from "../../stores/board"
+import { useBoardStore } from "@stores/board"
 
 const Reset = () => {
     const resetScores = useBoardStore((state) => state.setResetScores);
