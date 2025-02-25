@@ -5,8 +5,8 @@ const Reset = () => {
     const resetGame = useBoardStore((state) => state.setNewBoard);
     return (
         <div className="main-reset-container">
-            <button className='btn-reset' onClick={resetScores}>Reset Players</button>
-            <button className='btn-reset' onClick={resetGame}>Reset Game</button>
+            <button onClick={resetScores}>Reset Scores</button>
+            <button onClick={resetGame}>Reset Game</button>
         </div> 
     )
 }

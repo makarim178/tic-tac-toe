@@ -16,7 +16,6 @@ const Message = () => {
                 <div className="reset-container">
                     <h3>{getWinnerBadge()}</h3>
                     <button
-                        className="btn-reset"
                         onClick={mutateNewBoard}
                     >
                         New Game

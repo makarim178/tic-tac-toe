@@ -10,10 +10,16 @@ export const WINNING_COMBINATIONS = [
     [6,4,2]
 ]
 
+export const CORNER_CELLS = [0,2,6,8];
+export const MIDDLE_CELL = 4;
+export const CROSS_CELLS = ['08', '26'];
+export const DIAMOND_CELLS = [1,3,5,7];
+
 export const STYLENAMES = {
     CLICKED: 'box-bg',
     NOT_ALLOWED: 'not-allowed',
-    WIN: 'box-wins'
+    WIN: 'box-wins',
+    BOT: 'cell-bot'
 }
 
 export const PLAYERS = {

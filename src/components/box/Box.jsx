@@ -8,8 +8,10 @@ const Box = ({ index }) => {
     const boxStyles = useBoardStore((state) => state.boxStyles);
     const gameOn = useBoardStore((state) => state.gameOn);
     const currPlayer = useBoardStore((state) => state.currentPlayer);
+    const botTurn = useBoardStore((state) => state.botTurn);
 
     const mutateBoard = useBoardStore((state) => state.setBoard);
+    const mutatePlayerMove = useBoardStore((state) => state.setPlayersLastMoveIndex);
 
     
     const retrieveBoxStyles = () => boxStyles[index] ?? ''
@@ -19,15 +21,18 @@ const Box = ({ index }) => {
     const handleClick = () => {
         // CHECK IF BOX HAS ALREADY BEEN PRESSED
         // CHECK IF GAME IS OVER
-        if (checkBoardEmpty() && gameOn) mutateBoard(index, currPlayer);
-        
+        if (checkBoardEmpty() && gameOn) {
+            mutatePlayerMove(index);
+            mutateBoard(index, currPlayer);
+        }  
     }
 
     return (
-        <div className={`box ${retrieveBoxStyles()}`} onClick={handleClick}>
-            <span>
+        <div className={`box ${retrieveBoxStyles()}`} style={{ pointerEvents: `${botTurn ? 'none' : ''}`}} onClick={handleClick}>
+            { (botTurn && checkBoardEmpty()) && <div className="loader"></div> }
+            { !(botTurn && checkBoardEmpty()) && <span>
                 {board[index]}
-            </span>
+            </span>}
         </div>
     )
 }

@@ -1,14 +1,12 @@
 .player {
     flex: 1;
     padding: 0 12px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    background-color: azure;
-
-    border-radius: 0.25rem;
+    border: solid 1px var(--COLOR-GRAY);
+    box-sizing: border-box;
+    border-radius: 0.5rem;
 }
 
 .active {
-    background-color: chocolate;
+    border: solid 2px var(--COLOR-CRIMSON);
     color: white;
-    font-weight: 100;
 }

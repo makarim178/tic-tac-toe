@@ -1,16 +1,20 @@
 import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
 import { PLAYERS, STYLENAMES } from '@shared/constants';
 
-export const useBoardStore = create((set) => ({
+const boardStore = (set) => ({
     board: Array(9).fill(''),
     boxStyles: Array(9).fill(''),
     currentPlayer: PLAYERS.X,
+    playerLastMoveIndex: null,
     isWin: false,
+    botTurn: false,
     scores: {
         [PLAYERS.X]: 0,
         [PLAYERS.O]: 0
     },
     gameOn: true,
+    setPlayersLastMoveIndex: (index) => set(() => ({ playerLastMoveIndex: index})),
     setCurrentPlayer: () => set((state) => {
         if(state.currentPlayer === PLAYERS.X) return { currentPlayer: PLAYERS.O };
         return { currentPlayer: PLAYERS.X }
@@ -20,7 +24,7 @@ export const useBoardStore = create((set) => ({
         nb[index] = content;
         let newBoxStyles = [ ...state.boxStyles];
         newBoxStyles[index] = `${STYLENAMES.CLICKED} ${STYLENAMES.NOT_ALLOWED}`
-        return { board: nb, boxStyles: newBoxStyles };
+        return { board: nb, boxStyles: newBoxStyles, botTurn: !state.botTurn };
     }),
     setBoardStyles: content => set(() => ({ boxStyles: content })),
     setBoxStyles: (index, content) => set((state) => {
@@ -41,6 +45,10 @@ export const useBoardStore = create((set) => ({
         boxStyles: Array(9).fill(''),
         currentPlayer: PLAYERS.X,
         gameOn: true,
-        isWin: false
+        isWin: false,
+        botTurn: false,
+        playerLastMoveIndex: null
     }))
-}))
+})
+
+export const useBoardStore = create(devtools(boardStore));
