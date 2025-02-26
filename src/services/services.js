@@ -19,12 +19,18 @@ const isWinCombs = selectedCombinations => WINNING_COMBINATIONS.some(numbers => 
     return wins;
 });
 
-const retrieveIndexesOfPlayer = (board, currentPlayer) => board.reduce((acc, p, i) => { 
-    if (p === currentPlayer) acc.push(i);
+
+export const isBoardFilled = board => !board.filter(box => box === '').length;
+
+const retrieveIndexesOfPlayer = (board, player) => board.reduce((acc, cell, i) => { 
+    if (cell === player) acc.push(i);
     return acc;
 }, []);
 
-export const isBoardFilled = board => !board.filter(box => box === '').length;
+const getBlankCellIndices = board => board.reduce((acc, cell, index) => {
+    if (cell === '') acc.push(index)
+    return acc;
+}, []);
 
 export const getWinCombs = (board, currentPlayer) => {
     const selectedCombinations = retrieveIndexesOfPlayer(board, currentPlayer);
@@ -42,17 +48,7 @@ export const boxStylesOnWin = (boxStyles, wn) => boxStyles.reduce((acc, bs, i) =
     return acc;
 }, []);
 
-export const isBoardEmpty = board => board.every(b => b === '');
-
-const getBlankCellIndices = board => board.reduce((acc, cell, index) => {
-	if (cell === '') acc.push(index)
-	return acc;
-}, []);
-
-const getIndicesOfSelectionByPlayer = (board, player) => board.reduce((acc, cell, index) => {
-    if (cell === player) acc = acc + index;
-    return acc;
-}, '');
+export const isBoardEmpty = board => board.every(cell => cell === '');
 
 const randomSelectionFromArray = arr => arr[Math.floor(Math.random() * arr.length)];
 const getNextMoveByWin = (board, arr) => arr.reduce((acc, blankCell) => {
@@ -69,20 +65,11 @@ const getNextMoveByWin = (board, arr) => arr.reduce((acc, blankCell) => {
 const checkForMove = (board, player, count) => board.filter(cell => cell === player).length === count;
 
 const checkForCrossIndices = (board, player) => {
-    const checkCrossIndices = getIndicesOfSelectionByPlayer(board, player);
+    const checkCrossIndices = retrieveIndexesOfPlayer(board, player).join('');
     return CROSS_CELLS.some(comb => comb === checkCrossIndices);
 }
 
 const isNumber = number => typeof number === 'number';
-
-// CHECK FOR FIRST MOVE IN CORNER
-// const checkFirstMoveInCorner = (board, player) => {
-//     if (checkForMove(board, player, 1)) {
-//         const selectedIndex = board.findIndex(cell => cell === player)
-//         return CORNER_CELLS.includes(selectedIndex)
-//     }
-//     return false;
-// }
 
 // CHECK FOR SECOND MOVE FOR CROSS SELECTION
 const checkForSecondMoveCrossing = (board, player) => {
