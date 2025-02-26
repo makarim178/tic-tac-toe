@@ -1,7 +1,9 @@
 import {
+    BOT_DIAMOND_CELL_SELECTION,
     CORNER_CELLS,
     CROSS_CELLS,
     DIAMOND_CELLS,
+    DIAMOND_CELLS_COMBINATIONS,
     MIDDLE_CELL,
     PLAYERS,
     STYLENAMES,
@@ -71,44 +73,53 @@ const checkForCrossIndices = (board, player) => {
 
 const isNumber = number => typeof number === 'number';
 
-// CHECK FOR SECOND MOVE FOR CROSS SELECTION
-const checkForSecondMoveCrossing = (board, player) => {
-    if(checkForMove(board, player, 2)) {
-        return checkForCrossIndices(board, player);
-    }
-    return false;
-}
-
 const getOppositeIndexFromCross = index => CROSS_CELLS.reduce((acc, comb) => {
     if (comb.includes(index)) acc = parseInt(comb.replace(index, ''));
     return acc;
-}, null )
+}, null );
+const isSelectionMatchDiamondIndices = (board, player) => {
+    const selection = retrieveIndexesOfPlayer(board, player).join('');
+    console.log(selection);
+    return {
+        isMatch: DIAMOND_CELLS_COMBINATIONS.some(combination => combination === selection),
+        selection
+    };
+}
+
+const getBotSelectionForDiamondIndices = combination => BOT_DIAMOND_CELL_SELECTION[DIAMOND_CELLS_COMBINATIONS.findIndex(comb => comb === combination)]
 
 export const getBotMove = (board, lastMove) => {
     // GET BLANK CELLS FROM BOARD
     const blankCellIndices = getBlankCellIndices(board);
-
-    // RETURN MIDDLE CELL WHEN PLAYER SELECTS CORNER CELLS
-    // if (checkFirstMoveInCorner(board, PLAYERS.X)) return MIDDLE_CELL;
+    const isSecondMove = checkForMove(board, PLAYERS.X, 2);
+    // STEP 1: RETURN MIDDLE INDEX IF EMPTY
     if (board[MIDDLE_CELL] === '') return MIDDLE_CELL;
-    // MAKE SECOND MOVE FOR CROSSINGS
-    if (checkForSecondMoveCrossing(board, PLAYERS.X)) return randomSelectionFromArray(DIAMOND_CELLS);
 
+    // MAKE SECOND MOVE FOR CROSSINGS
+    if (isSecondMove) {
+        // STEP 2 CHECK FOR CROSS INDICES
+        // RETURN MIDDLE CELL WHEN PLAYER SELECTS CORNER CELLS
+        if (checkForCrossIndices(board, PLAYERS.X)) return randomSelectionFromArray(DIAMOND_CELLS);
+        // STEP 3: CHECK FOR SECOND MOVE && DIAMOND SELECTIONS
+        const { isMatch, selection } = isSelectionMatchDiamondIndices(board, PLAYERS.X);
+        if (isMatch) return getBotSelectionForDiamondIndices(selection);
+    }
+    
     const getMoveByWin = getNextMoveByWin(board, blankCellIndices);
-    // STEP 1: CHECK FOR PLAYER - WIN POSSIBILITY
+    // STEP 4: CHECK FOR PLAYER - WIN POSSIBILITY
     if(getMoveByWin[PLAYERS.O].length) return randomSelectionFromArray(getMoveByWin[PLAYERS.O]);
-    // STEP 2: CHECK FOR BOT - WIN POSSIBILITY
+    // STEP 5: CHECK FOR BOT - WIN POSSIBILITY
     if(getMoveByWin[PLAYERS.X].length) return randomSelectionFromArray(getMoveByWin[PLAYERS.X]);
-    // STEP 3: CHECK LAST PLAYER MOVE ON CORNER CELLS
+    // STEP 6: CHECK LAST PLAYER MOVE ON CORNER CELLS
     if (isNumber(lastMove) && CORNER_CELLS.includes(lastMove)) {
         const oppositeIndex = getOppositeIndexFromCross(lastMove);
-        if (oppositeIndex !== null) return oppositeIndex;
+        if (oppositeIndex !== null && blankCellIndices.includes(oppositeIndex)) return oppositeIndex;
     }
-    // STEP 4: RETRIEVE FROM PRIORITY
-    const firstPriorityCells = blankCellIndices.filter(blankCell => CORNER_CELLS.includes(blankCell));    
+    // STEP 7: RETRIEVE FROM PRIORITY
+    const firstPriorityCells = blankCellIndices.filter(blankCell => CORNER_CELLS.includes(blankCell));
     if(firstPriorityCells.length) return randomSelectionFromArray(firstPriorityCells);
-    
-    // STEP 5: RETRIEVE FROM LESS PRIORITY
+
+    // STEP 8: RETRIEVE FROM LESS PRIORITY
     return randomSelectionFromArray(blankCellIndices.filter(blankCell => !CORNER_CELLS.includes(blankCell)));
 }
 export default {

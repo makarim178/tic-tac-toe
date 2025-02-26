@@ -11,9 +11,11 @@ export const WINNING_COMBINATIONS = [
 ]
 
 export const CORNER_CELLS = [0,2,6,8];
-export const MIDDLE_CELL = 4;
-export const CROSS_CELLS = ['08', '26'];
 export const DIAMOND_CELLS = [1,3,5,7];
+export const DIAMOND_CELLS_COMBINATIONS = ['13', '15', '37', '57'];
+export const CROSS_CELLS = ['08', '26'];
+export const BOT_DIAMOND_CELL_SELECTION = [0, 2, 6, 8];
+export const MIDDLE_CELL = 4;
 
 export const STYLENAMES = {
     CLICKED: 'box-bg',
